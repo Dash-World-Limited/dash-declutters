@@ -1,0 +1,22 @@
+# /etc/systemd/system/dash-declutters-api.service
+#
+# The API runs from source through tsx; there is no build artefact.
+
+[Unit]
+Description=DASH Declutters API (Fastify)
+After=network-online.target redis-server.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=dash
+WorkingDirectory=/opt/dash-declutters
+EnvironmentFile=/etc/dash/declutters-api.env
+ExecStart=/usr/bin/npm run start --workspace @dash/api
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

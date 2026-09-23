@@ -1,0 +1,23 @@
+# /etc/systemd/system/dash-declutters-web.service
+#
+# Serves the build produced by `npm run build`. Restarting this does NOT pick
+# up new NEXT_PUBLIC_* values — those are inlined at build time.
+
+[Unit]
+Description=DASH Declutters web (Next.js)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=dash
+WorkingDirectory=/opt/dash-declutters
+EnvironmentFile=/etc/dash/declutters-web.env
+ExecStart=/usr/bin/npm run start --workspace @dash/web
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
